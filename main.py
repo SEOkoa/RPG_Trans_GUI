@@ -19,7 +19,6 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
 from pathlib import Path
-from Game_info import *
 
 import sys, os
 import qdarktheme
@@ -29,6 +28,7 @@ import qdarktheme
 class MainUI(QObject):
     def __init__(self, ui_file):
         super().__init__()
+       
 
         # Load the UI file
         loader = QUiLoader()
@@ -42,42 +42,87 @@ class MainUI(QObject):
 
         #드래그 앤 드롭 아이콘
         self.drag_drop_label = self.window.findChild(QLabel, "Location_Drag_Drop")
-        self.folder_info_widget = self.window.findChild(QWidget, "Folder_info_widget")
+
 
         #폴더 정보 라벨
         self.folder_name_label = self.window.findChild(QLabel, "Folder_Name_label")
         self.is_encrypt_label = self.window.findChild(QLabel, "Is_Encrypt_label")
         self.rpg_ver_label = self.window.findChild(QLabel, "RPG_Ver_label")
+        self.decryptlog_label = self.window.findChild(QLabel, "DecryptLog_label")
+        self.translog_label = self.window.findChild(QLabel, "TransLog_label")
 
         # 폴더 탐색 관련 위젯
         self.file_control_layout = self.window.findChild(QHBoxLayout,"FileControl_layout")
         self.folder_structure_tree = self.window.findChild(QTreeWidget,"FolderStructure_Tree")
         self.preview_table = self.window.findChild(QTableWidget,"PreView_Table")
 
-        # Install an event filter on the drag_drop_label label to handle mouse press events
+        #사이드바 버튼
+        self.decrypt_btn = self.window.findChild(QPushButton, "Decrypt_btn")
+        self.trans_btn = self.window.findChild(QPushButton, "Trans_btn")
+        self.dummy_btn = self.window.findChild(QPushButton, "Dummy_btn")
+        self.dummy_btn_2 = self.window.findChild(QPushButton, "Dummy_btn_2")
+
+        
+       
+        # 위젯 기초 세팅
+        self.decrypt_btn.setEnabled(False)
+        self.trans_btn.setEnabled(False)
+        self.dummy_btn.setEnabled(False)
+        self.dummy_btn_2.setEnabled(False)
+
         self.drag_drop_label.setPixmap('UI/download_icon.svg')
+        
+         # Install an event filter on the drag_drop_label label to handle mouse press events
         self.drag_drop_label.installEventFilter(self)
         
 
         # Show the main window
         self.window.show()
 
+        
     @staticmethod
     def version_check(self, folder_path):
+        self.translog_label.clear()
+
         if Path(folder_path).joinpath('game.ini').exists():
-            engine = 'RPG XP/VX'
-            self.rpg_ver_label.setText(engine)
+            engine = 'RPG Maker XP/VX'
+            self.trans_btn.setEnabled(True)
+
+        elif Path(folder_path).joinpath('www').exists():
+            engine = 'RPG Maker MV'
+            self.trans_btn.setEnabled(False)
+            self.translog_label.setText('해당 버전은 번역 기능이 지원되지 않습니다.') 
+
+        elif Path(folder_path).joinpath('js').exists():
+            engine = 'RPG Maker MZ'
+            self.trans_btn.setEnabled(False)
+            self.translog_label.setText('해당 버전은 번역 기능이 지원되지 않습니다.') 
+
+        else:
+            engine = '알 수 없음'
+            self.trans_btn.setEnabled(False)
+            self.translog_label.setText('알 수 없는 파일이므로 번역이 불가능합니다.') 
+        
+        self.rpg_ver_label.setText(engine)
 
     @staticmethod
     def encryption_check(self, folder_path):
+        self.decryptlog_label.clear()
+
         if Path(folder_path).joinpath('Game.rgss3a').exists():
             encryption = 'rgss3a로 암호화됨'
-            self.is_encrypt_label.setText(encryption)
+            self.decrypt_btn.setEnabled(True)
+            
+        else:
+            encryption = '암호화 정보를 읽을 수 없음'
+            self.decrypt_btn.setEnabled(False)
+            self.decryptlog_label.setText('알 수 없는 파일이므로 번역이 불가능합니다.') 
+
+        self.is_encrypt_label.setText(encryption)
             
      # 드래그 앤 드롭 라벨 아이콘을 실행파일 아이콘으로 바꿈        
     @staticmethod
     def get_launcher_icon(self, folder_path):
-       
         launcher_path = folder_path + '/Game.exe'
         icon_provider = QFileIconProvider()
         file_icon = icon_provider.icon(launcher_path)
