@@ -55,29 +55,9 @@ class MainUI(QObject):
         # 하단 위젯 정의
         self.file_control_layout = self.window.findChild(QHBoxLayout,"FileControl_layout")
         self.folder_structure_tree = self.window.findChild(QTreeWidget,"FolderStructure_Tree")
+        self.preview_table = self.window.findChild(QTableWidget,"PreView_Table")
 
-        self.txtview_widget = self.window.findChild(QPlainTextEdit,"TXTView_Widget")
-        self.csvview_Widget = self.window.findChild(QTableWidget,"CSVView_Widget")
-        self.odsview_widget = self.window.findChild(QTableWidget,"ODSView_Widget")
-
-        # 폴더 탐색 관련 시그널 정의
-        self.folder_structure_tree.itemSelectionChanged.connect(self.on_item_selected)
-
-
-        #사이드바 버튼 정의
-        self.decrypt_btn = self.window.findChild(QPushButton, "Decrypt_btn")
-        self.trans_btn = self.window.findChild(QPushButton, "Trans_btn")
-        self.dummy_btn = self.window.findChild(QPushButton, "Dummy_btn")
-        self.dummy_btn_2 = self.window.findChild(QPushButton, "Dummy_btn_2")
-
-        
-       
-        # 사이드바 버튼 초기화(비활성)
-        self.decrypt_btn.setEnabled(False)
-        self.trans_btn.setEnabled(False)
-        self.dummy_btn.setEnabled(False)
-        self.dummy_btn_2.setEnabled(False)
-
+        # Install an event filter on the drag_drop_label label to handle mouse press events
         self.drag_drop_label.setPixmap('UI/download_icon.svg')
         
          # Install an event filter on the drag_drop_label label to handle mouse press events
@@ -87,7 +67,6 @@ class MainUI(QObject):
         # Show the main window
         self.window.show()
 
-    #특정 파일이나 폴더가 있는지를 통해 쯔꾸르 버전을 확인하는 함수
     @staticmethod
     def version_check(self, folder_path):
         self.translog_label.clear()
@@ -116,19 +95,9 @@ class MainUI(QObject):
     
     @staticmethod  #암호화 파일이 있는지 검사하는 함수
     def encryption_check(self, folder_path):
-        
-        self.decryptlog_label.clear()
-
         if Path(folder_path).joinpath('Game.rgss3a').exists():
             encryption = 'rgss3a로 암호화됨'
-            self.decrypt_btn.setEnabled(True)
-            
-        else:
-            encryption = '암호화 정보를 읽을 수 없음'
-            self.decrypt_btn.setEnabled(False)
-            self.decryptlog_label.setText('알 수 없는 파일이므로 해독이 불가능합니다.') 
-
-        self.is_encrypt_label.setText(encryption)
+            self.is_encrypt_label.setText(encryption)
             
     
     @staticmethod  # 드래그 앤 드롭 라벨 아이콘을 실행파일 아이콘으로 바꿈

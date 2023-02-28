@@ -7,8 +7,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
+<<<<<<< HEAD
     <width>1366</width>
     <height>872</height>
+=======
+    <width>1280</width>
+    <height>730</height>
+>>>>>>> d83e13a96393609b93724ea1b6cdb1663716bf74
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,8 +24,13 @@
   </property>
   <property name="minimumSize">
    <size>
+<<<<<<< HEAD
     <width>1366</width>
     <height>768</height>
+=======
+    <width>1280</width>
+    <height>730</height>
+>>>>>>> d83e13a96393609b93724ea1b6cdb1663716bf74
    </size>
   </property>
   <property name="contextMenuPolicy">
@@ -36,8 +46,290 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
+<<<<<<< HEAD
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="1">
+     <widget class="QFrame" name="Right_SideBar_Frame">
+=======
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="9,1">
+    <item>
+     <widget class="QFrame" name="Entire_Frame">
+>>>>>>> d83e13a96393609b93724ea1b6cdb1663716bf74
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+<<<<<<< HEAD
+      <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,2">
+=======
+      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,2">
+>>>>>>> d83e13a96393609b93724ea1b6cdb1663716bf74
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
+        <number>5</number>
+       </property>
+       <item>
+<<<<<<< HEAD
+        <layout class="QVBoxLayout" name="UpperSide_layout">
+         <item>
+          <spacer name="verticalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="Decrypt_btn">
+           <property name="text">
+            <string>암호화 해제</string>
+           </property>
+=======
+        <widget class="QFrame" name="Folder_info_Frame">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>100</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0,4">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="Location_Drag_Drop">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>100</horstretch>
+              <verstretch>100</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>100</height>
+             </size>
+            </property>
+            <property name="acceptDrops">
+             <bool>true</bool>
+            </property>
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="lineWidth">
+             <number>3</number>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="scaledContents">
+             <bool>false</bool>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="S_InfoLabel_layout">
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>파일 경로 : </string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>버전 정보 : </string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>암호화 정보 : </string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="InfoLabel_layout">
+            <item>
+             <widget class="QLabel" name="Folder_Name_label">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="RPG_Ver_label">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="Is_Encrypt_label">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="DecryptLog_label">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="TransLog_label">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="WorkSpace_Frame">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="FileControl_layout">
+            <item>
+             <widget class="QTableWidget" name="PreView_Table"/>
+            </item>
+            <item>
+             <widget class="QTreeWidget" name="FolderStructure_Tree">
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <column>
+               <property name="text">
+                <string notr="true">1</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
      <widget class="QFrame" name="Right_SideBar_Frame">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -61,26 +353,11 @@
        <item>
         <layout class="QVBoxLayout" name="UpperSide_layout">
          <item>
-          <spacer name="verticalSpacer_6">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
           <widget class="QPushButton" name="Decrypt_btn">
            <property name="text">
             <string>암호화 해제</string>
            </property>
+>>>>>>> d83e13a96393609b93724ea1b6cdb1663716bf74
           </widget>
          </item>
          <item>
@@ -108,6 +385,7 @@
        <item>
         <layout class="QVBoxLayout" name="BottomSide_layout">
          <item>
+<<<<<<< HEAD
           <spacer name="verticalSpacer_7">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -124,6 +402,8 @@
           </spacer>
          </item>
          <item>
+=======
+>>>>>>> d83e13a96393609b93724ea1b6cdb1663716bf74
           <widget class="QPushButton" name="Trans_btn">
            <property name="text">
             <string>번역 진행</string>
@@ -150,6 +430,7 @@
            </property>
           </spacer>
          </item>
+<<<<<<< HEAD
          <item>
           <widget class="QCheckBox" name="TXT_Filter">
            <property name="text">
@@ -634,6 +915,11 @@
         </widget>
        </item>
       </layout>
+=======
+        </layout>
+       </item>
+      </layout>
+>>>>>>> d83e13a96393609b93724ea1b6cdb1663716bf74
      </widget>
     </item>
    </layout>
@@ -643,7 +929,11 @@
     <rect>
      <x>0</x>
      <y>0</y>
+<<<<<<< HEAD
      <width>1366</width>
+=======
+     <width>1280</width>
+>>>>>>> d83e13a96393609b93724ea1b6cdb1663716bf74
      <height>22</height>
     </rect>
    </property>
