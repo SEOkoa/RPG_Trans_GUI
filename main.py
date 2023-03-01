@@ -20,6 +20,10 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
 from pathlib import Path
+from bs4 import BeautifulSoup as bs
+import requests
+import seaborn as sns
+import pandas as pd
 
 import sys, os
 import qdarktheme
@@ -244,18 +248,23 @@ class MainUI(QObject):
             try:
                 with open(path, encoding=encoding) as f:
                     content = f.read()
+                df = pd.read_csv(path, encoding=encoding)
                 break
             except UnicodeDecodeError:
                 continue
 
+        csv_column_amount = len(df.columns)
+        csv_row_amount = len(df)
 
         # csvviewer가 파일을 읽을 때의 초기 설정
         self.csvview_Widget.clear()
-        self.csvview_Widget.setRowCount(10)
-        self.csvview_Widget.setColumnCount(10)
-        self.csvview_Widget.setHorizontalHeaderLabels(['File Contents'])
-        self.csvview_Widget.setItem(1, 0, QTableWidgetItem(content))
-          
+        self.csvview_Widget.setRowCount(csv_row_amount)
+        self.csvview_Widget.setColumnCount(csv_column_amount)
+        for i in range(csv_row_amount):
+            for j in range(csv_column_amount):
+                item = QTableWidgetItem(str(df.iloc[i, j]))
+                self.csvview_Widget.setItem(i, j, item)
+            
 
 # from Main_UI.ui, 메인 윈도우 호출
 if __name__ == "__main__":
