@@ -2,4 +2,7 @@
   <qresource prefix="icons">
     <file>download_icon.svg</file>
   </qresource>
+  <qresource prefix="fonts">
+    <file>D2Coding.ttc</file>
+  </qresource>
 </RCC>

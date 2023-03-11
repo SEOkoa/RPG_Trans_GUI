@@ -29,14 +29,17 @@ import pandas as pd
 
 import sys, os
 import qdarktheme
+import shutil
+
+#------------external scripts------------#
+from script_py import rgss123_decrypter
+
 #------------------본문------------------#
-
-
 
 class MainUI(QObject):
     def __init__(self, ui_file):
         super().__init__()
-       
+        self.root_folder_path = None
 
         # Load the UI file
         loader = QUiLoader()
@@ -103,9 +106,8 @@ class MainUI(QObject):
         self.window.show()
 
         
-
-    #특정 파일이나 폴더가 있는지를 통해 쯔꾸르 버전을 확인하는 함수
-    @staticmethod
+    #----------------- 함수 정의 -----------------#
+    @staticmethod   #특정 파일이나 폴더가 있는지를 통해 쯔꾸르 버전을 확인하는 함수
     def version_check(self, folder_path):
         self.translog_label.clear()
 
@@ -139,6 +141,8 @@ class MainUI(QObject):
         if Path(folder_path).joinpath('Game.rgss3a').exists():
             encryption = 'rgss3a로 암호화됨'
             self.decrypt_btn.setEnabled(True)
+            shutil.copyfile(folder_path + '/Game.rgss3a', folder_path + '/Trans/Original_Data/Game.rgss3a')  # rgss3a 파일 백업
+
             
         else:
             encryption = '암호화 정보를 읽을 수 없음'
@@ -158,10 +162,11 @@ class MainUI(QObject):
     
     @staticmethod # 폴더가 선택되었을 때, 폴더를 검사하는 함수
     def analyze_folder(self, folder_path):
-
+        self.root_folder_path = folder_path
         #상단에 게임 기본 정보 분석
         self.folder_name_label.setText(folder_path) #폴더 경로는 여기서 표시
         self.folder_structure_tree.clear() # 새 내용 표시를 위해 Tree위젯 초기화
+
 
         # root 폴더를 tree widget에 추가
         root_item = QTreeWidgetItem(self.folder_structure_tree)
@@ -170,6 +175,14 @@ class MainUI(QObject):
 
         #하위 폴더들을 보여주기 위해 함수 호출
         self.populate_tree(folder_path, root_item)
+
+        #백업 폴더 생성
+        self.createDirectory(folder_path + '/Trans')
+        self.createDirectory(folder_path + '/Trans/Original_Data')
+        self.createDirectory(folder_path + '/Trans/Trans_Data')
+        self.refresh_tree()
+
+        #폴더 분석
         self.version_check(self, folder_path)
         self.encryption_check(self, folder_path)
         self.get_launcher_icon(self, folder_path)
@@ -190,8 +203,6 @@ class MainUI(QObject):
         with open(path, 'rb') as f:
             text = f.read()
             return text
-
-
 
     @staticmethod
     def previewer_switch(self, path, item_extension):
@@ -239,11 +250,23 @@ class MainUI(QObject):
         else:
                 # Display the file contents in txtview_widget if the file extension is not csv or ods
                 self.txtview_Widget.setPlainText(text.decode(encoding))
-                self.tab_Widget.setCurrentIndex(0)
+                self.tab_Widget.setCurrentIndex(0)           
+    
+    @staticmethod
+    def createDirectory(directory):
+        try:
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+                print(directory + " has been created")
+        except OSError:
+            print("Error: Failed to create the directory.")     
 
-                
-
-                
+    def refresh_tree(self):
+        self.folder_structure_tree.clear()
+        root_item = QTreeWidgetItem(self.folder_structure_tree)
+        root_item.setText(0, os.path.basename(self.root_folder_path))
+        root_item.setToolTip(0, self.root_folder_path)
+        self.populate_tree(self.root_folder_path, root_item)       
 
     # 특정 확장자를 가진 파일에만 체크박스 생성  
     def checkFileExtension(self, item: QTreeWidgetItem, column: int):
@@ -286,6 +309,11 @@ class MainUI(QObject):
             url = event.mimeData().urls()[0]
             folder_path = url.toLocalFile()
             self.analyze_folder(self, folder_path)
+          
+
+            
+
+            
             
 
         # Otherwise, call the base class eventFilter to handle the event normally
@@ -336,8 +364,7 @@ class MainUI(QObject):
         #full_path도 마찬가지임
 
         self.previewer_switch(self, path, item_extension)
-
-       
+ 
 
 # from Main_UI.ui, 메인 윈도우 호출
 if __name__ == "__main__":

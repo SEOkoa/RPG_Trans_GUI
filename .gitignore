@@ -1,0 +1,8 @@
+
+build/main
+dist/
+__pychche__/
+.idea/
+.vscode/
+
+main.spec
