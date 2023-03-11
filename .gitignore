@@ -4,5 +4,7 @@ dist/
 __pychche__/
 .idea/
 .vscode/
+script_py/Data/
+script_py/Graphics/
 
 main.spec
