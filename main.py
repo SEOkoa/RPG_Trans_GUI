@@ -29,14 +29,21 @@ import pandas as pd
 
 import sys, os
 import qdarktheme
+import shutil
+
+#------------external scripts------------#
+from script_py import rgss123_decrypter
+
+#------------- 전역변수 선언 -------------#
+
+folder_path = ''
+
 #------------------본문------------------#
-
-
 
 class MainUI(QObject):
     def __init__(self, ui_file):
         super().__init__()
-       
+        self.root_folder_path = None
 
         # Load the UI file
         loader = QUiLoader()
@@ -93,19 +100,21 @@ class MainUI(QObject):
         self.dummy_btn.setEnabled(False)
         self.dummy_btn_2.setEnabled(False)
 
+
         self.drag_drop_label.setPixmap('UI/download_icon.svg')
         
          # Install an event filter on the drag_drop_label label to handle mouse press events
         self.drag_drop_label.installEventFilter(self)
         
+         #----------------- 사이드 버튼 동작설정  -----------------#
+        self.decrypt_btn.clicked.connect(self.decrypt_activate)
 
         # Show the main window
         self.window.show()
 
         
-
-    #특정 파일이나 폴더가 있는지를 통해 쯔꾸르 버전을 확인하는 함수
-    @staticmethod
+    #----------------- 함수 정의 -----------------#
+    @staticmethod   #특정 파일이나 폴더가 있는지를 통해 쯔꾸르 버전을 확인하는 함수
     def version_check(self, folder_path):
         self.translog_label.clear()
 
@@ -139,6 +148,7 @@ class MainUI(QObject):
         if Path(folder_path).joinpath('Game.rgss3a').exists():
             encryption = 'rgss3a로 암호화됨'
             self.decrypt_btn.setEnabled(True)
+            shutil.copyfile(folder_path + '/Game.rgss3a', folder_path + '/Trans/Original_Data/Game.rgss3a')  # rgss3a 파일 백업
             
         else:
             encryption = '암호화 정보를 읽을 수 없음'
@@ -146,6 +156,7 @@ class MainUI(QObject):
             self.decryptlog_label.setText('알 수 없는 파일이므로 해독이 불가능합니다.') 
 
         self.is_encrypt_label.setText(encryption)
+        self.refresh_tree()
             
     
     @staticmethod  # 드래그 앤 드롭 라벨 아이콘을 실행파일 아이콘으로 바꿈
@@ -154,14 +165,14 @@ class MainUI(QObject):
         icon_provider = QFileIconProvider()
         file_icon = icon_provider.icon(launcher_path)
         self.drag_drop_label.setPixmap(file_icon.pixmap(512, 512))  # set a 32x32 pixmap
-
     
     @staticmethod # 폴더가 선택되었을 때, 폴더를 검사하는 함수
     def analyze_folder(self, folder_path):
-
+        self.root_folder_path = folder_path
         #상단에 게임 기본 정보 분석
         self.folder_name_label.setText(folder_path) #폴더 경로는 여기서 표시
         self.folder_structure_tree.clear() # 새 내용 표시를 위해 Tree위젯 초기화
+
 
         # root 폴더를 tree widget에 추가
         root_item = QTreeWidgetItem(self.folder_structure_tree)
@@ -170,10 +181,19 @@ class MainUI(QObject):
 
         #하위 폴더들을 보여주기 위해 함수 호출
         self.populate_tree(folder_path, root_item)
+
+        #백업 폴더 생성
+        self.createDirectory(folder_path + '/Trans')
+        self.createDirectory(folder_path + '/Trans/Original_Data')
+        self.createDirectory(folder_path + '/Trans/Trans_Data')
+        self.refresh_tree()
+
+        #폴더 분석
         self.version_check(self, folder_path)
         self.encryption_check(self, folder_path)
         self.get_launcher_icon(self, folder_path)
-      
+        self.refresh_tree()
+        
     @staticmethod
     def previewer_sensor(path, item_extension, encoding):
         if item_extension == '.csv':
@@ -190,8 +210,6 @@ class MainUI(QObject):
         with open(path, 'rb') as f:
             text = f.read()
             return text
-
-
 
     @staticmethod
     def previewer_switch(self, path, item_extension):
@@ -239,11 +257,32 @@ class MainUI(QObject):
         else:
                 # Display the file contents in txtview_widget if the file extension is not csv or ods
                 self.txtview_Widget.setPlainText(text.decode(encoding))
-                self.tab_Widget.setCurrentIndex(0)
+                self.tab_Widget.setCurrentIndex(0)           
+    
+    @staticmethod
+    # 암호화 해제 버튼을 눌렀을 때 스크립트 실행하는 함수
+    def decrypt_activate(self):
+        decrypt_path = f'{folder_path}/Trans/Original_Data'
 
-                
+        print(decrypt_path)
+        os.system(f"python script_py/rgss123_decrypter.py -x -d {decrypt_path} {decrypt_path}/Game.rgss3a")
+        self.refresh_tree()
 
-                
+    @staticmethod
+    def createDirectory(directory):
+        try:
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+                print(directory + " has been created")
+        except OSError:
+            print("Error: Failed to create the directory.")     
+
+    def refresh_tree(self):
+        self.folder_structure_tree.clear()
+        root_item = QTreeWidgetItem(self.folder_structure_tree)
+        root_item.setText(0, os.path.basename(self.root_folder_path))
+        root_item.setToolTip(0, self.root_folder_path)
+        self.populate_tree(self.root_folder_path, root_item)       
 
     # 특정 확장자를 가진 파일에만 체크박스 생성  
     def checkFileExtension(self, item: QTreeWidgetItem, column: int):
@@ -263,8 +302,8 @@ class MainUI(QObject):
         # drag_drop 아이콘을 직접 누르면 직접 폴더를 추가
         if source == self.drag_drop_label and event.type() == QEvent.MouseButtonPress:
             # Open a file dialog to select a folder
+            global folder_path
             folder_path = QFileDialog.getExistingDirectory(None, "Select Folder")
-
             # 폴더가 선택되었을 경우,
             if folder_path:
                 self.analyze_folder(self, folder_path)
@@ -283,9 +322,11 @@ class MainUI(QObject):
         # 아이콘에 폴더가 드롭 되었을 때
         elif source == self.drag_drop_label and event.type() == QEvent.Drop:
             # Get the path of the dropped folder and display it in the Folder_Name_label
+         
             url = event.mimeData().urls()[0]
             folder_path = url.toLocalFile()
             self.analyze_folder(self, folder_path)
+
             
 
         # Otherwise, call the base class eventFilter to handle the event normally
@@ -337,7 +378,8 @@ class MainUI(QObject):
 
         self.previewer_switch(self, path, item_extension)
 
-       
+       #------------------ 이벤트 기능 ------------------#
+   
 
 # from Main_UI.ui, 메인 윈도우 호출
 if __name__ == "__main__":
